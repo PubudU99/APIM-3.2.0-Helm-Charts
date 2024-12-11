@@ -272,11 +272,11 @@ wso2:
           driver: "com.mysql.cj.jdbc.Driver"
         apimDB: # TODO
           # -- AM database URL
-          url: "jdbc:mysql://bnym.mysql.database.azure.com:3306/apimDB?useSSL=false"
+          url: "jdbc:mysql://bnymellon-mysql.mysql.database.azure.com:3306/apimDB?useSSL=false"
           # -- AM database username
-          username: "bnymDB"
+          username: "bnymellonDB"
           # -- AM database password
-          password: "Wso2@123"
+          password: "CSTproject@001"
           # -- JDBC pool parameters for AM database
           poolParameters:
             validationQuery: "SELECT 1"
@@ -286,11 +286,11 @@ wso2:
             indexingFrequencyInSeconds: 10
         sharedDB: # TODO
           # -- Shared database URL
-          url: "jdbc:mysql://bnym.mysql.database.azure.com:3306/sharedDB?useSSL=false"
+          url: "jdbc:mysql://bnymellon-mysql.mysql.database.azure.com:3306/sharedDB?useSSL=false"
           # -- Shared database username
-          username: "bnymDB"
+          username: "bnymellonDB"
           # -- Shared database password
-          password: "Wso2@123"
+          password: "CSTproject@001"
           # -- JDBC pool parameters for shared database
           poolParameters:
             validationQuery: "SELECT 1"
