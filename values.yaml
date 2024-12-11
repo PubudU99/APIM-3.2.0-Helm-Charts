@@ -1,0 +1,658 @@
+# -------------------------------------------------------------------------------------
+#
+# Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
+#
+# This software is the property of WSO2 LLC. and its suppliers, if any.
+# Dissemination of any information or reproduction of any material contained 
+# herein is strictly forbidden, unless permitted by WSO2 in accordance with the 
+# WSO2 Commercial License available at https://wso2.com/licenses/eula/3.2
+#
+# --------------------------------------------------------------------------------------
+
+aws:
+  # -- If AWS is used as the cloud provider
+  enabled: false
+  # -- AWS region
+  region: ""
+  # Persistent storage configuration parameters
+  efs:
+    # -- EFS capacity
+    capacity: ""
+    # -- EFS directory permissions
+    directoryPerms: ""
+    # -- EFS file system ID for mounting the persistent volume
+    fileSystemId: ""
+    # EFS Access Points for static provisioning
+    accessPoints:
+      # -- EFS Access Point ID for mounting carbonDB
+      carbonDb: ""
+      # -- EFS Access Point ID for mounting solr
+      solr: ""
+  # Secret manager configuration parameters
+  secretsManager:
+    # -- AWS Secrets Manager secret provider class name
+    secretProviderClass: ""
+    secretIdentifiers:
+      # Internal keystore password identifier in secrets manager
+      internalKeystorePassword:
+        # -- AWS Secrets Manager secret name
+        secretName: ""
+        # -- AWS Secrets Manager secret key
+        secretKey: ""
+    # -- Name of Kubernetes service account to read secrets
+    serviceAccountName: ""
+
+azure:
+  # -- If Azure is used as the cloud provider
+  enabled: false
+  # Azure Key vault configuration parameters
+  keyVault:
+    # -- Azure Key vault used for credential management
+    name: ""
+    # -- Azure Key vault secret provider class name
+    secretProviderClass: ""
+    secretIdentifiers:
+      # -- Internal keystore password identifier in keyvault
+      internalKeystorePasswordID: ""
+    activeDirectory:
+      # Service Principal created for transacting with the target Azure Key Vault
+      servicePrincipal:
+        # -- Application ID of the service principal used in secret-store-csi
+        clientID: ""
+        # -- Client secret name of the service principal used in secret-store-csi
+        clientSecret: ""
+      # -- Azure Active Directory tenant ID of the target Key Vault
+      tenantId: ""
+    resourceManager:
+      # -- Subscription ID of the target Azure Key Vault
+      subscriptionId: ""
+      # -- Name of the Azure Resource Group to which the target Azure Key Vault belongs
+      resourceGroup: ""
+  # Needed for persisting indexing related data
+  persistence:
+    # -- Persistent volume capacity
+    capacity: ""
+    # -- Persistent volume storage class
+    storageClass: ""
+    # -- Persistent volume storage account type
+    storageAccountType: ""
+    # -- Azure file secret name
+    secretName: ""
+    # Azure fileshare share names
+    fileShares:
+      # -- Azure fileshare share name for carbonDB
+      carbondb: ""
+      # -- Azure fileshare share name for solr
+      solr: ""
+      
+gcp:
+  # -- If GCP is used as the cloud provider
+  enabled: false
+  # File Store configuration parameters
+  fs:
+    # -- Storage capacity of the file system (in GB or other appropriate units)
+    capacity: ""
+    # FileStore configuration parameters
+    fileshares:
+      # FileShare configs for CarbonDB persistent storage
+      carbonDB:
+        # -- FileStore of the CarbonDB persistent storage
+        fileStoreName: ""
+        # -- FileShare of the CarbonDB persistent storage
+        fileShareName: ""
+        # -- IP of the CarbonDB persistent storage
+        ip: ""
+      # FileShare configs for solr persistent storage
+      solr:
+        # -- FileStore of the solr persistent storage
+        fileStoreName: ""
+        # -- FileShare of the solr persistent storage
+        fileShareName: ""
+        # -- IP of the solr persistent storage
+        ip: ""
+    # -- Tier of the FileStore
+    tier: ""
+    # -- Network of the FileStore
+    network: ""
+    # -- Region of the FileStore
+    location: ""
+  # Secrets Manager configuration parameters
+  secretsManager:
+    # -- Project ID
+    projectId: ""
+    # -- Secret provider class
+    secretProviderClass: ""
+    secret:
+      # -- Name of the secret
+      secretName: ""
+      # -- Version of the secret 
+      secretVersion: ""
+    # -- Service Account with access to read secrets
+    serviceAccountName: ""
+
+kubernetes:
+  # -- Ingress class to be used for the ingress resource
+  ingressClass: "nginx"
+  ingress:
+    ratelimit:
+      # -- Enable Ingress rate limit
+      enabled: false
+      # -- Ingress ratelimit zone name
+      zoneName: ""
+      # -- Ingress ratelimit burst limit
+      burstLimit: ""
+    controlPlane:
+      enabled: true
+      # Hostname for API Manager Carbon Management Console, Publisher, DevPortal, and Admin Portal
+      hostname: "am.wso2.com"
+      # Annotations for the API Manager Publisher-DevPortal services Ingress
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/affinity: "cookie"
+        nginx.ingress.kubernetes.io/session-cookie-name: "route"
+        nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    gateway:
+      enabled: true
+      # -- Ingress hostname for Gateway pass-through
+      hostname: "gw.wso2.com"
+      # -- Ingress annotations for Gateway pass-through
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/proxy-buffering: "on"
+        nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    websocket:
+      enabled: true
+      # -- Ingress hostname for Websocket
+      hostname: "websocket.wso2.com"
+      # -- Ingress annotations for Websocket
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/proxy-buffering: "on"
+        nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+  securityContext:
+    # -- User ID of the container
+    runAsUser: "802"
+
+wso2:
+  apim:
+    configurations:
+      # -- Admin username of the API Manager
+      adminUsername: "admin"
+      # -- Admin password of the API Manager
+      adminPassword: "admin"
+
+      # APIM Analytics configurations
+      analytics:
+        # -- Enable or disable APIM Analytics (true/false)
+        enabled: false
+        # -- Store API URL for Analytics
+        storeApiUrl:
+        # -- Username for Analytics
+        username:
+        # -- Password for Analytics
+        password:
+        # -- Receiver username for Analytics
+        receiverUsername:
+        # -- Receiver password for Analytics
+        receiverPassword:
+        # -- Store API username for Analytics
+        storeApiUsername:
+        # -- Store API password for Analytics
+        storeApiPassword:
+        # -- Event publishing type
+        eventPublishingType:
+        # -- URL list for Analytics
+        analyticsUrls:
+        # -- Authentication URL list for Analytics
+        analyticsAuthUrls:
+      
+      # APIM cache related configurations
+      cache:
+        # Gateway token cache configuration
+        gatewayToken:
+            # -- Enable or disable gateway token cache (true/false)
+            enabled: false
+            # -- Expiration time for gateway token cache
+            expiryTime: "15m"
+        # Resource cache configuration
+        resource:
+            # -- Enable or disable resource cache (true/false)
+            enabled: false
+            # -- Expiration time for resource cache
+            expiryTime: "900s"
+        # KM token cache configuration
+        kmToken:
+            # -- Enable or disable KM token cache (true/false)
+            enabled: false
+            # -- Expiration time for KM token cache
+            expiryTime: "15m"
+        # Recent APIs cache configuration
+        recentApis:
+            # -- Enable or disable recent APIs cache (true/false)
+            enabled: false
+        scopes:
+            # -- Scopes cache configuration
+            enabled: false
+        publisherRoles:
+            # -- Publisher roles cache configuration
+            enabled: false
+        # JWT claim cache configuration
+        jwtClaim:
+            # -- Enable or disable JWT claim cache (true/false)
+            enabled: false
+            # -- Expiration time for JWT claim cache
+            expiryTime: "15m"
+        # Tags cache configuration
+        tags:
+            # -- Enable or disable tags cache (true/false)
+            enabled: false
+            # -- Expiration time for tags cache
+            expiryTime: "2m"
+      
+
+      # APIM CORS configurations
+      cors:
+        # -- CORS configuration enabled
+        enabled: true
+        # -- CORS Access-Control-Allow-Origin
+        allowOrigins: ["*"]
+        # -- CORS Access-Control-Allow-Methods
+        allowMethods: ["GET","PUT","POST","DELETE","PATCH","OPTIONS"]
+        # -- CORS Access-Control-Allow-Headers
+        allowHeaders: ["authorization","Access-Control-Allow-Origin","Content-Type","SOAPAction","apikey","Internal-Key"]
+        # -- CORS Access-Control-Allow-Credentials
+        allowCredentials: false
+
+      # APIM DB configurations
+      databases:
+        # -- Azure database type
+        type: "mysql"
+        jdbc:
+          # -- JDBC driver class name
+          driver: "com.mysql.cj.jdbc.Driver"
+        apimDB: # TODO
+          # -- AM database URL
+          url: "jdbc:mysql://bnym.mysql.database.azure.com:3306/apimDB?useSSL=false"
+          # -- AM database username
+          username: "bnymDB"
+          # -- AM database password
+          password: "Wso2@123"
+          # -- JDBC pool parameters for AM database
+          poolParameters:
+            validationQuery: "SELECT 1"
+            testOnBorrow: true
+            removeAbandoned: true
+            removeAbandonedTimeout: 300
+            indexingFrequencyInSeconds: 10
+        sharedDB: # TODO
+          # -- Shared database URL
+          url: "jdbc:mysql://bnym.mysql.database.azure.com:3306/sharedDB?useSSL=false"
+          # -- Shared database username
+          username: "bnymDB"
+          # -- Shared database password
+          password: "Wso2@123"
+          # -- JDBC pool parameters for shared database
+          poolParameters:
+            validationQuery: "SELECT 1"
+            testOnBorrow: true
+            removeAbandoned: true
+            removeAbandonedTimeout: 300
+            indexingFrequencyInSeconds: 10
+
+      # Devportal configurations
+      devportal:
+        # -- Enable or disable application sharing
+        enableApplicationSharing: 
+        # -- Type of application sharing
+        applicationSharingType: 
+        # -- Implementation details for application sharing
+        applicationSharingImpl: 
+        # -- Display multiple versions of the same API or only show the latest version
+        displayMultipleVersions: 
+        # -- Display deprecated APIs in the portal
+        displayDeprecatedApis: 
+        # -- Enable or disable comments for the API
+        enableComments: 
+        # -- Enable or disable ratings for the API
+        enableRatings: 
+        # -- Enable or disable the forum for the API
+        enableForum: 
+        # -- Enable or disable anonymous mode
+        enableAnonymousMode: 
+        # -- Enable or disable subscriptions across tenants
+        enableCrossTenantSubscriptions: 
+        # -- Create a default application for new users
+        create_default_application: 
+        # -- Specify whether the username is case-insensitive during login
+        loginUsernameCaseInsensitive:
+        # -- Enable or disable key provisioning
+        enableKeyProvisioning:
+
+      # Event Listeners configuration for the WSO2 API Gateway
+      eventListeners:
+        # -- Token revocation event listener configuration
+        - id: "token_revocation"
+          type: "org.wso2.carbon.identity.core.handler.AbstractIdentityHandler"
+          name: "org.wso2.is.notification.ApimOauthEventInterceptor"
+          order: 1
+          properties:
+            # -- Notification endpoint for token revocation event
+            notificationEndpoint: "https://localhost:${mgt.transport.https.port}/internal/data/v1/notify"
+
+      # APIM Gateway configurations
+      gateway:
+        # -- Gateway environments
+        environments:
+          # -- Gateway name
+        - name: "default"
+          # -- Gateway type
+          type: "hybrid"
+          # -- Display in the API console
+          displayInApiConsole: true
+          # -- Description
+          description: "This is the internal gateway environment"
+          # -- Show as Token Endpoint URL
+          showAsTokenEndpointUrl: true
+          # -- Service name for the gateway
+          serviceName: "apim-am-all-in-one-am-service"
+          # -- Service port for the gateway
+          servicePort: 9443
+          # -- Hostname for Websocket requests
+          wsHostname: "websocket.wso2.com"
+          # -- Hostname for HTTP requests
+          httpHostname: "gw.wso2.com"
+      
+      # Identity Provider (IdP) configurations
+      idp:
+        # -- Enable or disable Identity Provider functionality (true/false)
+        enabled: true
+        # -- URL of the Identity Provider server
+        serverUrl: "https://am.wso2.com"
+        # -- Authorization endpoint for OAuth 2.0
+        authorizeEndpoint: "https://am.wso2.com/oauth2/authorize"
+        # -- OpenID Connect (OIDC) configuration
+        oidc:
+          # -- Logout endpoint for OIDC
+          logoutEndpoint: "https://am.wso2.com/oidc/logout"
+          # -- Session endpoint for OIDC
+          sessionEndpoint: "https://am.wso2.com/oidc/checksession"
+
+      iskm:
+        # -- Set true ISKM is used instead of Resident KM
+        enabled: false
+        # -- ISKM kubernetes service name if ISKM is used instead of Resident KM
+        serviceName:
+        # -- ISKM kubernetes service port if ISKM is used instead of Resident KM
+        servicePort: 
+
+      jwt:
+        # Enable backend JWT generation in gateway
+        enabled: false
+        # JWT encoding algorithm. Can be either base64 or base64url
+        encoding: "base64"
+        # JWT header name.
+        header: "X-JWT-Assertion"
+        # JWT claim dialect
+        claimDialect: "http://wso2.org/claims"
+        # JWT signature algorithm. SHA256withRSA
+        signingAlgorithm: "SHA256withRSA"
+        # JWT generation implementation.
+        generatorImpl: "org.wso2.carbon.apimgt.keymgt.token.JWTGenerator"
+        # Enable end user claim mapping
+        enableUserClaims: "false"
+        # JWT claims extractor implementation. eg: org.wso2.carbon.apimgt.impl.token.DefaultClaimsRetriever
+        claimsExtractorImpl: "org.wso2.carbon.apimgt.impl.token.DefaultClaimsRetriever"
+
+      # APIM log4j configurations
+      log4j2:
+        # -- Console loggers that can be enabled. Allowed values are AUDIT_LOG_CONSOLE, HTTP_ACCESS_CONSOLE, TRANSACTION_CONSOLE, CORRELATION_CONSOLE
+        loggers: "AUDIT_LOG_CONSOLE, HTTP_ACCESS_CONSOLE, TRANSACTION_CONSOLE, CORRELATION_CONSOLE"
+        # -- Log4j appender to be enabled
+        appenders: ""
+            
+      # Notification configurations
+      notification:
+        # -- Sender's email address
+        fromAddress: 
+        # -- Username for authentication (if applicable)
+        username: 
+        # -- Password for authentication (if applicable)
+        password: 
+        # -- Hostname of the mail server
+        hostname: 
+        # -- Port for mail server communication
+        port: 25
+        # -- Enable STARTTLS for secure communication (true/false)
+        enableStartTls: false
+        # -- Enable authentication for the mail server (true/false)
+        enableAuthentication: false
+
+      oauth:
+        # -- Token cleanup configuration
+        tokenCleanup:
+            # -- Enable or disable OAuth token cleanup (true/false)
+            enable: false
+      # -- OAuth configuration
+      oauthConfig:
+          # -- Enable or disable OAuth functionality (true/false)
+          enabled: false
+          # -- OAuth2 token revocation endpoint URL
+          revokeEndpoint:
+          # -- Enable outbound authentication header for OAuth
+          enableOutboundAuthHeader:
+          # -- Authentication header configuration
+          authHeader:
+          # -- Enable token encryption for OAuth
+          enableTokenEncryption:
+          # -- Enable token hashing for OAuth
+          enableTokenHashing:
+            # Throttling configurations
+      
+      # APIM keystore configurations
+      security:
+        # -- Kubernetes secret name containing the keystores and truststore
+        jksSecretName: "jks-secret" # TODO
+        keystores:
+          primary:
+            # -- Primary keystore enabled
+            enabled: true
+            # -- Primary keystore name
+            name: "wso2carbon.jks"
+            # -- Primary keystore alias
+            alias: "wso2carbon"
+            # -- Primary keystore password
+            password: "wso2carbon"
+            # -- Primary keystore key password
+            keyPassword: "wso2carbon"
+          tls:
+            # -- Secondary keystore enabled
+            enabled: false
+            # -- Secondary keystore name
+            name: "wso2carbon1.jks"
+            # -- Secondary keystore alias
+            alias: "wso2carbon"
+            # -- Secondary keystore password
+            password: "wso2carbon"
+            # -- Secondary keystore key password
+            keyPassword: "wso2carbon"
+          internal:
+            # -- Internal keystore enabled
+            enabled: false
+            # -- Internal keystore name
+            name: "wso2carbon2.jks"
+            # -- Internal keystore alias
+            alias: "wso2carbon"
+            # -- Internal keystore password
+            password: "wso2carbon"
+            # -- Internal keystore key password
+            keyPassword: "wso2carbon"
+        truststore:
+          # -- Truststore name
+          name: "client-truststore.jks"
+          # -- Truststore password
+          password: "wso2carbon"
+  
+      serviceProvider:
+        # -- Service Provider name regex
+        spNameRegex: "^[\\sa-zA-Z0-9._-]*$"
+
+      throttling:
+        # -- Blacklist condition configuration
+        blacklistCondition:
+            # -- Enable or disable blacklist condition (true/false)
+            enabled: false
+            # -- Start delay for blacklist condition
+            startDelay: 
+            # -- Period for blacklist condition
+            period: 
+        # -- JMS throttling configuration
+        jms:
+            # -- Start delay for JMS throttling
+            startDelay: 
+    
+      # Token configurations
+      token:
+        # Token revocation configuration
+        revocation:
+          # -- Enable or disable token revocation functionality (true/false)
+          enabled: false
+          # -- Notifier implementation for token revocation
+          NotifierImpl: "org.wso2.carbon.apimgt.keymgt.events.TokenRevocationNotifierImpl"
+          # -- Enable real-time notifier for token revocation
+          EnableRealtimeNotifier: true
+          # -- Time-to-live (TTL) for real-time notifier (in milliseconds)
+          RealtimeNotifierTtl: 5000
+          # -- Enable persistent notifier for token revocation
+          EnablePersistentNotifier: true
+          # -- Hostname for the persistent notifier
+          PersistentNotifierHostname: "https://localhost:2379/v2/keys/jti/"
+          # -- Time-to-live (TTL) for persistent notifier (in milliseconds)
+          PersistentNotifierTtl: 5000
+          # -- Username for persistent notifier
+          PersistentNotifierUsername: "root"
+          # -- Password for persistent notifier
+          PersistentNotifierPassword: "root"
+
+      # Transport configurations
+      transport:
+        receiver:
+          # -- Receiver type (e.g., HTTP, HTTPS)
+          type: ""
+          # -- Number of worker threads
+          workerThreads: 10
+          # -- Session timeout duration
+          sessionTimeout: ""
+          # Keystore configuration
+          keystore:
+            # -- Keystore file name reference
+            fileName: "$ref{keystore.tls.file_name}"
+            # -- Keystore password reference
+            password: "$ref{keystore.tls.password}"
+          # -- TCP port for communication
+          tcpPort: 9611
+          # -- SSL port for secure communication
+          sslPort: 9711
+          # -- Enabled SSL protocols
+          sslEnabledProtocols:
+            - "TLSv1"
+            - "TLSv1.1"
+            - "TLSv1.2"
+          # -- List of supported ciphers
+          ciphers:
+            - "SSL_RSA_WITH_RC4_128_MD5"
+            - "SSL_RSA_WITH_RC4_128_SHA"
+
+      # APIM user store configurations
+      userStore:
+        # -- User store type. 
+        # https://apim.docs.wso2.com/en/latest/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-the-primary-user-store/
+        type: "database_unique_id"
+        # -- User store properties
+        properties:
+          key: value
+      
+      # Workflow configurations
+      workflow:
+        # -- Enable or disable workflow functionality (true/false)
+        enabled: false
+        # -- URL of the workflow service
+        serviceUrl:
+        # -- Callback endpoint for workflow
+        callbackEndpoint:
+        # -- Token endpoint for workflow
+        tokenEndpoint:
+        # -- Endpoint for client registration in workflow
+        clientRegistrationEndpoint:
+        # -- Username for client registration in workflow
+        clientRegistrationUsername:
+        # -- Password for client registration in workflow
+        clientRegistrationPassword:
+    # -- APIM server port offset
+    portOffset: 0
+    # -- Enable secure vault
+    secureVaultEnabled: false
+
+  deployment:
+    am: # TODO
+      image:
+        # -- Registry name consisting the image
+        registry: "cstimage123.azurecr.io"
+        # -- Repository name consisting the image
+        repository: "wso2am-3.2.0-2855"
+        # -- Docker image digest
+        digest: "sha256:6f068a7d0837de0d2fe46fc734ea252e25604866f4a37c97bcd982a16a1870a7"
+        # -- Image pull policy
+        imagePullPolicy: Always
+      resources:
+        # These are the resource recommendations for running WSO2 API Management product profiles with profile optimization
+        # Resource configurations defined here are applicable for all API Manager product profiles of this deployment
+        requests:
+          # -- Memory request for API Manager
+          memory: "1Gi"
+          # -- CPU request for API Manager
+          cpu: "1000m"
+        limits:
+          # -- Memory limit for API Manager
+          memory: "2Gi"
+          # -- CPU limit for API Manager
+          cpu: "2000m"
+        jvm:
+          memory:
+            # -- JVM heap memory Xms
+            xms: "1024m"
+            # -- JVM heap memory Xmx
+            xmx: "1024m"
+
+      # -- Minimum available pod counts for PDB
+      minAvailable: 1
+
+      # Indicates whether the container is running
+      livenessProbe:
+        # -- Number of seconds after the container has started before liveness probes are initiated
+        initialDelaySeconds: 120
+        # -- How often (in seconds) to perform the probe
+        periodSeconds: 10
+        # -- Minimum consecutive successes for the probe to be considered successful after having failed
+        failureThreshold: 3
+      # Indicates whether the container is ready to service requests
+      readinessProbe:
+        # -- Number of seconds after the container has started before readiness probes are initiated
+        initialDelaySeconds: 120
+        # -- How often (in seconds) to perform the probe
+        periodSeconds: 10
+        # -- Minimum consecutive successes for the probe to be considered successful after having failed
+        failureThreshold: 3
+
+    # Persisted and shared runtime artifacts for API Manager
+    persistence:
+      # -- Persistent runtime artifacts for Apache solr-based indexing
+      solrIndexing:
+        # -- Indicates if persistence of the runtime artifacts for Apache solr-based indexing is enabled
+        # By default, this is disabled
+        enabled: false
+        # Define capacities for persistent runtime artifact directories
+        capacity:
+          # -- For persisting the H2 based local Carbon database file
+          carbonDatabase: 50M
+          # -- For persisting the indexed data
+          solrIndexedData: 50M
