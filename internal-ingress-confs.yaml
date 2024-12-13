@@ -3,4 +3,4 @@ controller:
     annotations:
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       service.beta.kubernetes.io/azure-load-balancer-internal-subnet: snet-vnet-bnymellonprod-cst-spoke-prod-westeurope-001-nodepool
-      service.beta.kubernetes.io/azure-load-balancer-ipv4: 10.0.1.111
+      service.beta.kubernetes.io/azure-load-balancer-ipv4: 10.0.1.222
