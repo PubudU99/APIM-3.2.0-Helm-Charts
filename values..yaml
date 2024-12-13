@@ -1,0 +1,12 @@
+controller:
+  service:
+      annotations:
+          service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+          service.beta.kubernetes.io/azure-load-balancer-internal-subnet: snet-vnet-bnymellonprod-cst-spoke-prod-westeurope-001-nodepool
+          service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      externalTrafficPolicy: Local
+      type: LoadBalancer
+  admissionWebhooks:
+      enabled: false
+rbac:
+  create: true
