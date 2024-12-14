@@ -10,10 +10,3 @@ controller:
       enabled: false
 rbac:
   create: true
-
-  c8dfa2ca-65d9-45c5-830a-f3c93b1e5d5f
-
-  az role assignment create \
-  --assignee 65e190b3-0cab-4ed0-a70b-97d9ae12069f \
-  --role "Network Contributor" \
-  --scope "/subscriptions/c8dfa2ca-65d9-45c5-830a-f3c93b1e5d5f/resourceGroups/rg-bnymellonprod-cst-prod-westeurope/providers/Microsoft.Network/virtualNetworks/vnet-bnymellonprod-cst-spoke-prod-westeurope-001"
